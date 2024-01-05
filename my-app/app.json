@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "my-app",
+    "slug": "my-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "rgb(253, 57, 149)"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.misssim29.myapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.misssim29.myapp"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "@react-native-seoul/kakao-login",
+        {
+          "kakaoAppKey": "52663742113e915b5147636c03b9d784",
+          "kotlinVersion": "1.8.22",
+          "overrideKakaoSDKVersion": "2.9.0"
+        }
+      ],
+      "expo-build-properties",
+      [
+        "expo-updates",
+        {
+          "username": "misssim29"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow myapp to access your camera."
+        }
+      ]
+    ],
+    "scheme": "your-app-scheme",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "de558927-9287-41e0-9945-e39be07db7a6"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/de558927-9287-41e0-9945-e39be07db7a6"
+    }
+  }
+}
