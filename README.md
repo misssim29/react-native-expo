@@ -355,3 +355,7 @@ npx expo install expo-image-picker
 npm i react-native-pell-rich-editor
 
 [참고자료](https://github.com/wxik/react-native-rich-editor)
+
+### 키보드 높이 구하기
+
+npm i react-native-use-keyboard-height
