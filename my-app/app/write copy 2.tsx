@@ -26,8 +26,9 @@ const Write = () => {
   const [contentText, setContentText] = useState("");
   const richText = useRef(null);
   const richScroll = useRef(null);
-  const [pickedImages, setPickedImages] =
-    useState<ImagePicker.ImagePickerAsset[]>();
+  const [pickedImages, setPickedImages] = useState<
+    ImagePicker.ImagePickerAsset[]
+  >([]);
   const APIURL = process.env.EXPO_PUBLIC_API_URL;
   const submitWrite = () => {
     console.log(title);
@@ -47,8 +48,6 @@ const Write = () => {
   };
   const pickImageAsync = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    // 권한띄우기
     // if (status !== "granted") {
     //   requestPermission();
     // return false;
@@ -64,75 +63,70 @@ const Write = () => {
 
     if (!Imgresult.canceled) {
       // console.log(result.assets[0].uri);
-      //이미지 선택
-      axios
-        .post(
-          APIURL + "/categories/articles/sign-s3",
-          {
-            file_name: ["sample.jpg"],
-            user_id: 603200,
+      const {
+        data: {
+          data: {
+            signed_urls: [signedUrl],
           },
-          {
-            headers: {
-              Authorization:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWVkIjoiMjAyNC0wMS0wOVQwNzoyNDowNi4xNzg5MzAiLCJyb2xlIjoidXNlciIsIm5hbWUiOiJ0ZWRkeSIsImltYWdlIjp7InVybCI6Imh0dHBzOi8vaW1hZ2VzLnNvY2RvYy5pby91c2VyL21lbWJlcl9wcm9maWxlXzIwLnBuZyIsInR5cGUiOiJ0aHVtYm5haWwifSwicHJvdmlkZXIiOjAsIm5pY2tfbmFtZSI6Ilx1YzU0NFx1YjI5NFx1YzViOFx1YjJjOCIsImFnZSI6MjAwMCwiaWQiOjYwMzIwMCwiZW1haWwiOiJ0ZWRkeUBjcmVlZS5jbyJ9.wk9H7bTuvVeiC8lSCWbfsm_PjYZwKg0Q6FVvKWDvLGU",
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          const {
-            url: imageUrl,
-            data: { url: uploadUrl, fields },
-          } = res.data.data.signed_urls[0];
-          const formData = new FormData();
-          console.log(imageUrl, uploadUrl, fields);
+        },
+      } = await axios.post(
+        APIURL + "/categories/articles/sign-s3",
+        {
+          file_name: ["sample.jpg"],
+          user_id: 603200,
+        },
+        {
+          headers: {
+            Authorization:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWVkIjoiMjAyNC0wMS0wOVQwNzoyNDowNi4xNzg5MzAiLCJyb2xlIjoidXNlciIsIm5hbWUiOiJ0ZWRkeSIsImltYWdlIjp7InVybCI6Imh0dHBzOi8vaW1hZ2VzLnNvY2RvYy5pby91c2VyL21lbWJlcl9wcm9maWxlXzIwLnBuZyIsInR5cGUiOiJ0aHVtYm5haWwifSwicHJvdmlkZXIiOjAsIm5pY2tfbmFtZSI6Ilx1YzU0NFx1YjI5NFx1YzViOFx1YjJjOCIsImFnZSI6MjAwMCwiaWQiOjYwMzIwMCwiZW1haWwiOiJ0ZWRkeUBjcmVlZS5jbyJ9.wk9H7bTuvVeiC8lSCWbfsm_PjYZwKg0Q6FVvKWDvLGU",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const {
+        url: imageUrl,
+        data: { url: uploadUrl, fields },
+      } = signedUrl;
+      const formData = new FormData();
 
-          const name = Imgresult.assets[0].uri.substring(
-            Imgresult.assets[0].uri.lastIndexOf("/") + 1
-          );
-          const [, type] = name.split(".");
-          const fileData: any = {
-            name,
-            type: "image/" + type,
-            uri: Imgresult.assets[0].uri,
-          };
+      const name = Imgresult.assets[0].uri.substring(
+        Imgresult.assets[0].uri.lastIndexOf("/") + 1
+      );
+      const [, type] = name.split(".");
+      const fileData: any = {
+        name,
+        type: "image/" + type,
+        uri: Imgresult.assets[0].uri,
+      };
 
-          formData.append("policy", fields.policy);
-          formData.append("key", fields.key);
-          formData.append("acl", fields["acl"]);
-          formData.append("x-amz-algorithm", fields["x-amz-algorithm"]);
-          formData.append("x-amz-credential", fields["x-amz-credential"]);
-          formData.append("x-amz-date", fields["x-amz-date"]);
-          formData.append(
-            "x-amz-security-token",
-            fields["x-amz-security-token"]
-          );
-          formData.append("x-amz-signature", fields["x-amz-signature"]);
-          formData.append("Content-Type", fields["Content-Type"]);
-          formData.append("file", fileData);
-          axios
-            .post(uploadUrl, formData, {
-              headers: {
-                "Content-Type": fields["Content-Type"],
-                "Content-Encoding": "base64",
-              },
-            })
-            .then((res) => {
-              console.log(res);
-              setPickedImages(imageUrl);
-              richText?.current.insertImage(
-                imageUrl,
-                "width:100%; height:auto; min-height:300px;"
-              );
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      formData.append("policy", fields.policy);
+      formData.append("key", fields.key);
+      formData.append("acl", fields["acl"]);
+      formData.append("x-amz-algorithm", fields["x-amz-algorithm"]);
+      formData.append("x-amz-credential", fields["x-amz-credential"]);
+      formData.append("x-amz-date", fields["x-amz-date"]);
+      formData.append("x-amz-security-token", fields["x-amz-security-token"]);
+      formData.append("x-amz-signature", fields["x-amz-signature"]);
+      formData.append("Content-Type", fields["Content-Type"]);
+      formData.append(
+        "file",
+        fileData
+        // image_base64.replace(/^data:image\/\w+;base64,/, '')
+      );
+      const result = await axios.post(uploadUrl, formData, {
+        headers: {
+          "Content-Type": fields["Content-Type"],
+          "Content-Encoding": "base64",
+        },
+      });
+      console.log(Imgresult.assets[0].uri);
+      console.log("[testImageUpload]", imageUrl, result);
+
+      setPickedImages(Imgresult.assets);
+      await richText?.current.insertImage(
+        imageUrl,
+        "width:100%; height:auto; min-height:200px"
+      );
     } else {
       alert("사진을 선택해주세요.");
     }

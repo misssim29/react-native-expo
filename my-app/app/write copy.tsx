@@ -26,8 +26,9 @@ const Write = () => {
   const [contentText, setContentText] = useState("");
   const richText = useRef(null);
   const richScroll = useRef(null);
-  const [pickedImages, setPickedImages] =
-    useState<ImagePicker.ImagePickerAsset[]>();
+  const [pickedImages, setPickedImages] = useState<
+    ImagePicker.ImagePickerAsset[]
+  >([]);
   const APIURL = process.env.EXPO_PUBLIC_API_URL;
   const submitWrite = () => {
     console.log(title);
@@ -47,14 +48,12 @@ const Write = () => {
   };
   const pickImageAsync = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    // 권한띄우기
     // if (status !== "granted") {
     //   requestPermission();
     // return false;
     // }
 
-    let Imgresult = await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -62,9 +61,9 @@ const Write = () => {
       // allowsMultipleSelection: true,
     });
 
-    if (!Imgresult.canceled) {
+    if (!result.canceled) {
       // console.log(result.assets[0].uri);
-      //이미지 선택
+
       axios
         .post(
           APIURL + "/categories/articles/sign-s3",
@@ -74,30 +73,18 @@ const Write = () => {
           },
           {
             headers: {
-              Authorization:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWVkIjoiMjAyNC0wMS0wOVQwNzoyNDowNi4xNzg5MzAiLCJyb2xlIjoidXNlciIsIm5hbWUiOiJ0ZWRkeSIsImltYWdlIjp7InVybCI6Imh0dHBzOi8vaW1hZ2VzLnNvY2RvYy5pby91c2VyL21lbWJlcl9wcm9maWxlXzIwLnBuZyIsInR5cGUiOiJ0aHVtYm5haWwifSwicHJvdmlkZXIiOjAsIm5pY2tfbmFtZSI6Ilx1YzU0NFx1YjI5NFx1YzViOFx1YjJjOCIsImFnZSI6MjAwMCwiaWQiOjYwMzIwMCwiZW1haWwiOiJ0ZWRkeUBjcmVlZS5jbyJ9.wk9H7bTuvVeiC8lSCWbfsm_PjYZwKg0Q6FVvKWDvLGU",
               "Content-Type": "application/json",
             },
           }
         )
         .then((res) => {
+          console.log(res);
           const {
             url: imageUrl,
             data: { url: uploadUrl, fields },
           } = res.data.data.signed_urls[0];
+          console.log(result.assets[0].uri);
           const formData = new FormData();
-          console.log(imageUrl, uploadUrl, fields);
-
-          const name = Imgresult.assets[0].uri.substring(
-            Imgresult.assets[0].uri.lastIndexOf("/") + 1
-          );
-          const [, type] = name.split(".");
-          const fileData: any = {
-            name,
-            type: "image/" + type,
-            uri: Imgresult.assets[0].uri,
-          };
-
           formData.append("policy", fields.policy);
           formData.append("key", fields.key);
           formData.append("acl", fields["acl"]);
@@ -110,7 +97,7 @@ const Write = () => {
           );
           formData.append("x-amz-signature", fields["x-amz-signature"]);
           formData.append("Content-Type", fields["Content-Type"]);
-          formData.append("file", fileData);
+          formData.append("file", result.assets[0].base64);
           axios
             .post(uploadUrl, formData, {
               headers: {
@@ -119,20 +106,18 @@ const Write = () => {
               },
             })
             .then((res) => {
-              console.log(res);
-              setPickedImages(imageUrl);
-              richText?.current.insertImage(
-                imageUrl,
-                "width:100%; height:auto; min-height:300px;"
-              );
+              console.log(imageUrl, res);
             })
             .catch((error) => {
               console.log(error);
             });
-        })
-        .catch((err) => {
-          console.log(err);
         });
+
+      setPickedImages(result.assets);
+      richText?.current.insertImage(
+        result.assets[0].uri,
+        "width:200px; height:200px"
+      );
     } else {
       alert("사진을 선택해주세요.");
     }
