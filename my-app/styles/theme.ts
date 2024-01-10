@@ -1,6 +1,6 @@
 export default {
   color: {
-    main: "rgb(253, 57, 149)",
+    main: "#fd3995",
     text: "#505050",
   },
   fonts: {

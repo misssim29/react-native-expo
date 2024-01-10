@@ -61,11 +61,12 @@ const Write = () => {
       base64: true,
       // allowsMultipleSelection: true,
     });
+    console.log(Imgresult.assets);
 
     if (!Imgresult.canceled) {
       // console.log(result.assets[0].uri);
       //이미지 선택
-      axios
+      await axios
         .post(
           APIURL + "/categories/articles/sign-s3",
           {
@@ -80,7 +81,7 @@ const Write = () => {
             },
           }
         )
-        .then((res) => {
+        .then(async (res) => {
           const {
             url: imageUrl,
             data: { url: uploadUrl, fields },
@@ -111,7 +112,7 @@ const Write = () => {
           formData.append("x-amz-signature", fields["x-amz-signature"]);
           formData.append("Content-Type", fields["Content-Type"]);
           formData.append("file", fileData);
-          axios
+          await axios
             .post(uploadUrl, formData, {
               headers: {
                 "Content-Type": fields["Content-Type"],

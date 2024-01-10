@@ -3,6 +3,7 @@ import KaKaoLogins, {
   login,
   getAccessToken,
   getProfile,
+  loginWithKakaoAccount,
 } from "@react-native-seoul/kakao-login";
 import { useState } from "react";
 
@@ -13,7 +14,7 @@ function kakao() {
 
   const loginWithKakao = async (): Promise<void> => {
     try {
-      const data = await login();
+      const data = await loginWithKakaoAccount();
       setResult(JSON.stringify(data));
     } catch (err) {
       console.log(err);

@@ -70,11 +70,17 @@ const MainTabTable = () => {
   const DeviceWidth = Dimensions.get("window").width;
 
   const scrollViewRef = useRef(null);
-  const SwipeTap = (idx?: number) => {
-    setLoading(false);
-    getList(idx);
-    scrollViewRef?.current?.scrollTo({ x: idx * DeviceWidth, animated: true });
-  };
+  const SwipeTap = useCallback(
+    (idx?: number) => {
+      setLoading(false);
+      getList(idx);
+      scrollViewRef?.current?.scrollTo({
+        x: idx * DeviceWidth,
+        animated: true,
+      });
+    },
+    [dataList, setLoading, getList]
+  );
   const changeScroll = (e: any) => {
     const { contentOffset } = e.nativeEvent;
     if (contentOffset.x === 0 && Paging !== 0) {

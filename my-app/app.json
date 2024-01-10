@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "rgb(253, 57, 149)"
+      "backgroundColor": "#fd3995"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -32,11 +32,18 @@
         "@react-native-seoul/kakao-login",
         {
           "kakaoAppKey": "52663742113e915b5147636c03b9d784",
-          "kotlinVersion": "1.8.22",
-          "overrideKakaoSDKVersion": "2.9.0"
+          "kotlinVersion": "1.9.0",
+          "overrideKakaoSDKVersion": "2.11.1"
         }
       ],
-      "expo-build-properties",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "overrideKakaoSDKVersion": "2.11.1"
+          }
+        }
+      ],
       [
         "expo-updates",
         {

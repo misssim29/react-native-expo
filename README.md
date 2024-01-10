@@ -332,6 +332,8 @@ eas build -p ios --profile preview
 
 eas build -p android --profile preview
 
+\*\* build시에 \_layout.tsx에 있는 onFetchUpdateAsync(); 활성화시켜줘야한다.(그래야 update가 가능해짐)
+
 앱 빌드시에 ios으로 빌드시, app.json에 "overrideKakaoSDKVersion": "2.9.0" 는 제거해줘야한다.
 
 ### 스플래시 화면 제어하기

@@ -20,6 +20,11 @@ function Header() {
           <Text>List</Text>
         </Pressable>
       </LinkBox>
+      <LinkBox href="/login" asChild>
+        <Pressable>
+          <Text>Login</Text>
+        </Pressable>
+      </LinkBox>
     </Container>
   );
 }
