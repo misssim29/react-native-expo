@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { View, Text, Pressable } from "react-native";
 import styled from "styled-components/native";
 
-const SubHeader = ({ submit }) => {
+const SubHeader = ({ submit, title }) => {
   const HistoryBack = () => {
     router.back();
   };
@@ -16,14 +16,25 @@ const SubHeader = ({ submit }) => {
         <Text>뒤로가기</Text>
       </BtnReturn>
       <HeaderTitle>
-        <Text>글쓰기</Text>
+        <Title>{title}</Title>
       </HeaderTitle>
-      <BtnSubmit onPress={SubmitWrite}>
-        <Text>완료</Text>
+      <BtnSubmit>
+        {submit ? (
+          <Pressable onPress={SubmitWrite}>
+            <Text>완료</Text>
+          </Pressable>
+        ) : (
+          ""
+        )}
       </BtnSubmit>
     </SubHeaderWrap>
   );
 };
+
+const Title = styled(Text)`
+  font-size: 18px;
+  font-weight: bold;
+`;
 
 const SubHeaderWrap = styled(View)`
   flex-direction: row;
@@ -39,7 +50,7 @@ const HeaderTitle = styled(View)`
   flex: 1;
   align-items: center;
 `;
-const BtnSubmit = styled(Pressable)`
+const BtnSubmit = styled(View)`
   flex: 1;
   align-items: flex-end;
 `;

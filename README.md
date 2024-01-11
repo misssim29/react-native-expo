@@ -361,3 +361,47 @@ npm i react-native-pell-rich-editor
 ### 키보드 높이 구하기
 
 npm i react-native-use-keyboard-height
+
+### Image 컴포넌트
+
+npx expo install expo-image
+
+react-native의 기본버전보다 expo버전으로 쓰는게 더 좋다
+
+### IconFont 적용
+
+npm install --save react-native-vector-icons --save-dev @types/react-native-vector-icons
+
+```
+// _layout.tsx
+import * as Font from "expo-font";
+
+await Font.loadAsync({
+  customIcon: require("@/assets/customIcon.ttf"),
+});
+useEffect(() => {
+  loadFonts();
+}, []);
+async function loadFonts() {
+  await Font.loadAsync({
+    customIcon: require("@/assets/customIcon.ttf"),
+  });
+}
+// component/icon.tsx
+import icoMoonConfig from "@/assets/selection.json";
+import { createIconSetFromIcoMoon } from "react-native-vector-icons";
+
+const Icon = createIconSetFromIcoMoon(icoMoonConfig, "customIcon");
+
+export default Icon;
+
+// Page
+import Icon from "@/components/Icon";
+<Icon name="cafe" size={50} color="#222" />
+
+```
+
+[svg -> iconfont로 변환하기](https://icomoon.io/app/#/select/font)
+[설명참조](https://velog.io/@tata-v_vlelog/RN-%EC%BB%A4%EC%8A%A4%ED%85%80-Icon-Font-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-expo)
+
+변환할때 icon 변환 잘 됐는지 모양 확인해야함.. 제대로 안될때 있음

@@ -141,7 +141,7 @@ const Write = () => {
 
   return (
     <>
-      <SubHeader submit={submitWrite} />
+      <SubHeader submit={submitWrite} title="글쓰기" />
       <TextTitle
         placeholder="제목을 입력하시오"
         value={title}
