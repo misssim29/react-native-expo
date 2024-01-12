@@ -1,21 +1,27 @@
 import { View, Text, Pressable, TextInput } from "react-native";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import styled from "styled-components";
 import { useState, useRef, useCallback } from "react";
+import { BtnDefaultStyle, BtnDefaultTextStyle } from "@/styles/globalStyls";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import userSlice from "@/slices/user";
+import * as SecureStore from "expo-secure-store";
 
 const login = () => {
-  const [userId, setUserId] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const passwordRef = useRef(null);
   const emailRef = useRef(null);
   const [emailStyle, setEmailStyle] = useState("#ddd");
   const [passwordStyle, setPasswordStyle] = useState("#ddd");
-
-  const onChangeId = useCallback(
+  const APIURL = process.env.EXPO_PUBLIC_API_URL;
+  const dispatch = useDispatch();
+  const onChangeEmail = useCallback(
     (e: string) => {
-      setUserId(e);
+      setUserEmail(e);
     },
-    [userId]
+    [userEmail]
   );
   const onChangePwd = useCallback(
     (e: string) => {
@@ -25,8 +31,46 @@ const login = () => {
   );
 
   const onLogin = useCallback(() => {
-    console.log("로그인");
-  }, []);
+    console.log("계정정보", userEmail, userPassword);
+    dispatch(userSlice.actions.setLoading(true));
+    axios
+      .post(
+        `${APIURL}/auth/login`,
+        {
+          email: userEmail,
+          password: userPassword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.status.code == "200") {
+          //로그인성공
+          const resUser = res.data.data.user;
+          dispatch(
+            userSlice.actions.setUser({
+              id: resUser.id,
+              nickname: resUser["nick_name"],
+              token: resUser.token,
+            })
+          );
+          SecureStore.setItemAsync("id", resUser.id);
+          SecureStore.setItemAsync("nickname", resUser["nick_name"]);
+          SecureStore.setItemAsync("token", resUser.token);
+          dispatch(userSlice.actions.setLoading(false));
+          router.push("/");
+        } else {
+          alert(res.data.status.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [userEmail, userPassword]);
   return (
     <>
       <Flex>
@@ -36,9 +80,9 @@ const login = () => {
         <View>
           <InputBox
             placeholder="이메일을 입력하세요"
-            value={userId}
+            value={userEmail}
             style={{ borderColor: emailStyle }}
-            onChangeText={onChangeId}
+            onChangeText={onChangeEmail}
             placeholderTextColor={"#ddd"}
             importantForAccessibility="yes"
             autoComplete="email"
@@ -83,9 +127,9 @@ const login = () => {
         </View>
       </Flex>
       <View>
-        <BtnLogin onPress={onLogin}>
-          <BtnLoginText>로그인</BtnLoginText>
-        </BtnLogin>
+        <Pressable onPress={onLogin} style={BtnDefaultStyle}>
+          <Text style={BtnDefaultTextStyle}>로그인</Text>
+        </Pressable>
         <BtnSignUp href="/SignUp" asChild>
           <Pressable>
             <BtnSignText>회원가입</BtnSignText>
@@ -106,14 +150,6 @@ const Flex = styled(View)`
   flex: 1;
   padding: 0 5%;
 `;
-const BtnLogin = styled(Pressable)`
-  background-color: ${(props: any) => props.theme.color.main};
-  border-radius: 6px;
-  margin: 10px 5%;
-  justify-content: center;
-  align-items: center;
-  padding: 15px 0;
-`;
 const BtnSignUp = styled(Link)`
   border-width: 1px;
   border-color: ${(props: any) => props.theme.color.main};
@@ -122,11 +158,6 @@ const BtnSignUp = styled(Link)`
   justify-content: center;
   align-items: center;
   padding: 15px 0;
-`;
-const BtnLoginText = styled(Text)`
-  color: #fff;
-  font-size: 30px;
-  font-weight: bold;
 `;
 const BtnSignText = styled(Text)`
   color: ${(props: any) => props.theme.color.main};

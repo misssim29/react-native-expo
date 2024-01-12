@@ -405,3 +405,41 @@ import Icon from "@/components/Icon";
 [설명참조](https://velog.io/@tata-v_vlelog/RN-%EC%BB%A4%EC%8A%A4%ED%85%80-Icon-Font-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-expo)
 
 변환할때 icon 변환 잘 됐는지 모양 확인해야함.. 제대로 안될때 있음
+
+### animation 애니메이션
+
+npx expo install react-native-reanimated
+
+```
+//babel.config.js
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: ['react-native-reanimated/plugin'],
+  };
+};
+```
+
+### 로컬스토리지 (storage)
+
+엑스포 시큐어스토어 (보안이 높고 안전하게 저장하는 방법을 제공하는 라이브러리)
+
+npx expo install expo-secure-store
+
+```
+// app.json
+"expo": {
+    "ios": {
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+      ...
+    }
+  }
+
+```
+
+### webview 웹뷰
+
+npx expo install react-native-webview

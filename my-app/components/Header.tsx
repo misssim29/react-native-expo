@@ -1,8 +1,11 @@
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import { Link } from "expo-router";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducer";
 
 function Header() {
+  const loggedIn = useSelector((state: RootState) => state.user.loggedIn);
   return (
     <Container>
       <LinkBox href="/" asChild>
@@ -20,9 +23,22 @@ function Header() {
           <Text>List</Text>
         </Pressable>
       </LinkBox>
-      <LinkBox href="/login" asChild>
+      {loggedIn ? (
+        <LinkBox href="/MyPage" asChild>
+          <Pressable>
+            <Text>Mypage</Text>
+          </Pressable>
+        </LinkBox>
+      ) : (
+        <LinkBox href="/login" asChild>
+          <Pressable>
+            <Text>Login</Text>
+          </Pressable>
+        </LinkBox>
+      )}
+      <LinkBox href="/Webview" asChild>
         <Pressable>
-          <Text>Login</Text>
+          <Text>Webview</Text>
         </Pressable>
       </LinkBox>
     </Container>

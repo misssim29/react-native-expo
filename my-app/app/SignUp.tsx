@@ -1,17 +1,17 @@
 import SubHeader from "@/components/SubHeader";
 import { View, Text, Pressable } from "react-native";
-import { FlatList, ScrollView, TextInput } from "react-native-gesture-handler";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import styled from "styled-components";
-import {
-  MaterialIcons,
-  MaterialCommunityIcons,
-  Feather,
-} from "@expo/vector-icons";
-import { useState, useRef } from "react";
-import EmailSelect from "@/components/EmailSelect";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import userSlice from "@/slices/user";
 import { RootState } from "@/store/reducer";
+import modalSlice from "@/slices/modal";
+import AgreeSignUp from "@/components/AgreeSignUp";
+import axios from "axios";
+import userSlice from "@/slices/user";
+import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 // import Icon from "@/components/Icon";
 
 const SignUp = () => {
@@ -20,6 +20,11 @@ const SignUp = () => {
   const passwordRef = useRef(null);
   const passwordcheckRef = useRef(null);
   const [showEmailList, setShowEmailList] = useState(false);
+  const [userAgree, setUserAgree] = useState({
+    service: false,
+    privacy: false,
+    marketing: false,
+  });
 
   const [focused, setFocused] = useState({
     email: false,
@@ -34,17 +39,6 @@ const SignUp = () => {
     passwordcheck: "",
   });
 
-  const [userAgree, setUserAgree] = useState({
-    service: false,
-    privacy: false,
-    marketing: false,
-  });
-
-  // 동의항목
-  const Agree = (type: String) => {
-    console.log(type);
-  };
-
   //inputbox 포커스
   const handleFocus = (name: string, type: boolean) => {
     setFocused({
@@ -55,10 +49,27 @@ const SignUp = () => {
 
   //email 선택열기
   const dispatch = useDispatch();
-  const onModal = useSelector((state: RootState) => state.user.onModal);
   const openEmailExList = () => {
     setShowEmailList(true);
-    dispatch(userSlice.actions.setModal(true));
+    dispatch(modalSlice.actions.setModal(true));
+    dispatch(modalSlice.actions.setType("EmailList"));
+  };
+  const EmailType = useSelector((state: RootState) => state.modal.emailType);
+  const onModal = useSelector((state: RootState) => state.modal.onModal);
+  useEffect(() => {
+    if (onModal === false) {
+      setUserData({
+        ...userData,
+        emailtype: EmailType,
+      });
+    }
+  }, [EmailType, onModal]);
+
+  //동의항목
+  const reciveToAgree = (data: any) => {
+    setUserAgree({
+      ...data,
+    });
   };
 
   const onChangeInput = (e: string, type: string) => {
@@ -67,9 +78,63 @@ const SignUp = () => {
       [type]: e,
     });
   };
-
+  const APIURL = process.env.EXPO_PUBLIC_API_URL;
   const Submit = () => {
-    console.log(userData);
+    const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,18}$/;
+    if (!regex.test(userData.password)) {
+      alert(
+        "비밀번호는 영문, 숫자, 특수문자를 조합하여 6자 이상 18자 이하로 생성 가능합니다."
+      );
+      return false;
+    }
+
+    if (userData.password !== userData.passwordcheck) {
+      alert("비밀번호를 체크해주세요.");
+      return false;
+    }
+
+    dispatch(userSlice.actions.setLoading(true));
+    const marketing = userAgree.marketing ? "true" : "false";
+    axios
+      .post(
+        `${APIURL}/auth/signup`,
+        {
+          "user[email]": `${userData.email}@${userData.emailtype}`,
+          "user[password]": userData.password,
+          "user[marketing_agree]": marketing,
+          "user[supply_third_party_agree]": "0",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.status.code == "409") {
+          alert("이미 등록된 Email입니다.");
+          dispatch(userSlice.actions.setLoading(false));
+        } else if (res.data.status.code == "200") {
+          //로그인 작업
+          const resUser = res.data.data.user;
+          SecureStore.setItemAsync("id", resUser.id);
+          SecureStore.setItemAsync("nickname", resUser["nick_name"]);
+          SecureStore.setItemAsync("token", resUser.token);
+          dispatch(
+            userSlice.actions.setUser({
+              id: resUser.id,
+              nickname: resUser["nick_name"],
+              token: resUser.token,
+            })
+          );
+          dispatch(userSlice.actions.setLoading(false));
+          router.replace("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -218,75 +283,34 @@ const SignUp = () => {
             />
           </TextBox>
         </Flex>
-        <Flex>
-          <Flex>
-            <SubTitle>약관동의</SubTitle>
-          </Flex>
-          <AgreeBox>
-            <BtnAgree
-              onPress={() => {
-                Agree("all");
-              }}
-            >
-              <MaterialCommunityIcons
-                name="checkbox-marked-circle"
-                size={24}
-                color="#ddd"
-              />
-              <AgreeTextAll>아래의 내용에 모두 동의합니다</AgreeTextAll>
-            </BtnAgree>
-          </AgreeBox>
-          <AgreeBox>
-            <BtnAgree
-              onPress={() => {
-                Agree("service");
-              }}
-            >
-              <MaterialCommunityIcons
-                name="checkbox-blank-circle-outline"
-                size={24}
-                color="#ddd"
-              />
-              <AgreeText>서비스 이용약관 동의(필수)</AgreeText>
-            </BtnAgree>
-            <Feather name="chevron-down" size={24} color="#ddd" />
-          </AgreeBox>
-          <AgreeBox>
-            <BtnAgree
-              onPress={() => {
-                Agree("privacy");
-              }}
-            >
-              <MaterialCommunityIcons
-                name="checkbox-blank-circle-outline"
-                size={24}
-                color="#ddd"
-              />
-              <AgreeText>개인정보 취급방침(필수)</AgreeText>
-            </BtnAgree>
-            <Feather name="chevron-down" size={24} color="#ddd" />
-          </AgreeBox>
-          <AgreeBox>
-            <BtnAgree
-              onPress={() => {
-                Agree("marketing");
-              }}
-            >
-              <MaterialCommunityIcons
-                name="checkbox-blank-circle-outline"
-                size={24}
-                color="#ddd"
-              />
-              <AgreeText>마케팅 정보 수신(선택)</AgreeText>
-            </BtnAgree>
-            <Feather name="chevron-down" size={24} color="#ddd" />
-          </AgreeBox>
-        </Flex>
-        <SubmitBtn onPress={Submit}>
+        <AgreeSignUp sendToAgree={reciveToAgree} />
+        <SubmitBtn
+          onPress={Submit}
+          disabled={
+            userData.email !== "" &&
+            userData.emailtype !== "" &&
+            userData.password !== "" &&
+            userData.passwordcheck !== "" &&
+            userAgree.service &&
+            userAgree.privacy
+              ? false
+              : true
+          }
+          style={{
+            backgroundColor:
+              userData.email !== "" &&
+              userData.emailtype !== "" &&
+              userData.password !== "" &&
+              userData.passwordcheck !== "" &&
+              userAgree.service &&
+              userAgree.privacy
+                ? "#fd3995"
+                : "#ddd",
+          }}
+        >
           <SubmitText>가입완료</SubmitText>
         </SubmitBtn>
       </Wrap>
-      {showEmailList && onModal ? <EmailSelect /> : ""}
     </>
   );
 };
@@ -296,42 +320,11 @@ const SubmitText = styled(Text)`
 `;
 
 const SubmitBtn = styled(Pressable)`
-  background-color: ${(props: any) => props.theme.color.main};
   margin: 20px 0;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
   padding: 15px 0;
-`;
-
-const AgreeTextAll = styled(Text)`
-  font-size: 17px;
-  color: #000;
-  flex: 1;
-  margin-left: 10px;
-  font-weight: bold;
-`;
-
-const AgreeText = styled(Text)`
-  font-size: 16px;
-  color: #444;
-  flex: 1;
-  margin-left: 10px;
-`;
-
-const AgreeBox = styled(View)`
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom-width: 0.5px;
-  border-bottom-color: #ddd;
-`;
-
-const BtnAgree = styled(Pressable)`
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
 `;
 
 const EmailAt = styled(Text)`
