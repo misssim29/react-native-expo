@@ -31,6 +31,12 @@
       <array>
         <string>kakao52663742113e915b5147636c03b9d784</string>
       </array>
+      <key>CFBundleURLName</key>
+      <string>naver</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>com.misssim2929.snstest</string>
+      </array>
     </dict>
       <dict>
         <key>CFBundleURLSchemes</key>
@@ -49,6 +55,8 @@
       <string>kakaokompassauth</string>
       <string>storykompassauth</string>
       <string>kakaolink</string>
+      <string>naversearchapp</string>
+      <string>naversearchthirdlogin</string>
     </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>
