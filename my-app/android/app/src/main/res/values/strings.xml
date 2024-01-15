@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">thisapp</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="expo_runtime_version">1.0.0</string>
+  <string name="kakao_app_key">52663742113e915b5147636c03b9d784</string>
+</resources>

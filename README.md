@@ -167,9 +167,11 @@ npm i babel-plugin-module-resolver
 
 ## 카카오 로그인
 
+\*\* 키해시때문에 그냥 prebuild 이용하는게 속편함..
+
 https://github.com/crossplatformkorea/react-native-kakao-login?tab=readme-ov-file
 
-위 내용의 expo버전대로 설정
+1.  위 내용의 expo버전대로 설정
 
 https://docs.expo.dev/build/setup/
 
@@ -189,6 +191,22 @@ https://docs.expo.dev/build/setup/
 ```
 
 eas build -p android --profile preview
+
+keytool -exportcert -alias androiddebugkey -keystore /Users/simjuyeon/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+
+2.  prebuild 사용
+
+npm i @react-native-seoul/kakao-login 하고 npx pod-install
+
+sdk 버전문제시 : build.gradle에서 maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'} 추가
+
+키해시 추출 : keytool -exportcert -alias <RELEASE_KEY_ALIAS> -keystore <RELEASE_KEY_PATH> | openssl sha1 -binary | openssl base64
+
+[참조](https://ssilook.tistory.com/entry/RN-React-Native-%ED%82%A4-%ED%95%B4%EC%8B%9CKey-Hash-%EC%96%BB%EB%8A%94-%EB%B0%A9%EB%B2%95)
+
+경로로 들어가서 keytool -exportcert -alias my-key-alias -keystore my-upload-key.keystore | openssl sha1 -binary | openssl base64
+
+keytool -exportcert -alias androiddebugkey -keystore sns-test/android/app/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
 
 ## base64 사용법(한글)
 
@@ -326,7 +344,9 @@ eas update --branch preview --message "Updating the app"
 
 -> update는 빌드할때 버전과 같아야한다
 
-### eas build
+## eas build
+
+eas login
 
 eas build -p ios --profile preview
 
@@ -334,15 +354,13 @@ eas build -p android --profile preview
 
 \*\* build시에 \_layout.tsx에 있는 onFetchUpdateAsync(); 활성화시켜줘야한다.(그래야 update가 가능해짐)
 
-앱 빌드시에 ios으로 빌드시, app.json에 "overrideKakaoSDKVersion": "2.9.0" 는 제거해줘야한다.
-
-### 스플래시 화면 제어하기
+## 스플래시 화면 제어하기
 
 [참고자료](https://velog.io/@hsg5533/React-Native-Expo-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-Splash-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%A0%9C%EC%96%B4%ED%95%98%EA%B8%B0)
 
 npx expo install expo-splash-screen
 
-### 카메라 기능
+## 카메라 기능
 
 npx expo install expo-camera
 
@@ -352,23 +370,23 @@ npx expo install expo-image-picker
 
 [참고자료](https://docs.expo.dev/tutorial/image-picker/)
 
-### 편집기
+## 편집기
 
 npm i react-native-pell-rich-editor
 
 [참고자료](https://github.com/wxik/react-native-rich-editor)
 
-### 키보드 높이 구하기
+## 키보드 높이 구하기
 
 npm i react-native-use-keyboard-height
 
-### Image 컴포넌트
+## Image 컴포넌트
 
 npx expo install expo-image
 
 react-native의 기본버전보다 expo버전으로 쓰는게 더 좋다
 
-### IconFont 적용
+## IconFont 적용
 
 npm install --save react-native-vector-icons --save-dev @types/react-native-vector-icons
 
@@ -406,7 +424,7 @@ import Icon from "@/components/Icon";
 
 변환할때 icon 변환 잘 됐는지 모양 확인해야함.. 제대로 안될때 있음
 
-### animation 애니메이션
+## animation 애니메이션
 
 npx expo install react-native-reanimated
 
@@ -421,7 +439,7 @@ module.exports = function (api) {
 };
 ```
 
-### 로컬스토리지 (storage)
+## 로컬스토리지 (storage)
 
 엑스포 시큐어스토어 (보안이 높고 안전하게 저장하는 방법을 제공하는 라이브러리)
 
@@ -440,6 +458,41 @@ npx expo install expo-secure-store
 
 ```
 
-### webview 웹뷰
+## webview 웹뷰
 
 npx expo install react-native-webview
+
+## 패키지명 변경하는법
+
+- app.json에서 이름 바꾸기
+- npx expo prebuild --clean
+
+## prebuild
+
+[참조](https://docs.expo.dev/workflow/prebuild/)
+
+npx expo prebuild
+
+npx expo run:android
+
+npx expo run:ios
+
+### prebuild하면 생기는 sdk 관련문제
+
+prebuild시에 생기는 android폴더 내에 local.properties파일을 생성
+
+sdk.dir = /Users/내정보명(ex : simjuyeon)/library/Android/sdk
+
+android 폴더 들어가서 ./gradlew clean
+
+그런다음 npx expo run:android
+
+## android studio에서 google 로그인 안되는 문제
+
+애초에 google store가 가능한 디바이스로 다운받고 실행해야함
+
+## naver 네이버 로그인
+
+[참조](https://github.com/crossplatformkorea/react-native-naver-login)
+
+npm install @react-native-seoul/naver-login --save

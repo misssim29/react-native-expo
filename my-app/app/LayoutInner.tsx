@@ -70,7 +70,7 @@ function LayoutInner() {
       <SafeAreaView
         style={{
           flex: 1,
-          paddingTop: Platform.OS === "ios" ? 0 : 30,
+          paddingTop: Platform.OS === "ios" ? 0 : 40,
         }}
       >
         <StatusBar
