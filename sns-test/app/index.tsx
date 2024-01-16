@@ -7,6 +7,7 @@ import naverLogin, {
   NaverLoginResponse,
   GetProfileResponse,
 } from "@react-native-seoul/naver-login";
+import { AccessToken, LoginManager, Profile } from "react-native-fbsdk-next";
 
 const Home = () => {
   const [result, setResult] = useState<string>("");
@@ -58,7 +59,15 @@ const Home = () => {
   //페이스북
   const loginWithFacebook = async (): Promise<void> => {
     try {
-      const data = await login();
+      const data = await LoginManager.logInWithPermissions(["public_profile"]);
+      setResult("성공 :" + JSON.stringify(data));
+    } catch (err) {
+      setResult("실패 :" + JSON.stringify(err));
+    }
+  };
+  const getProfileFacebook = async (): Promise<void> => {
+    try {
+      const data = await Profile.getCurrentProfile();
       setResult("성공 :" + JSON.stringify(data));
     } catch (err) {
       setResult("실패 :" + JSON.stringify(err));
@@ -80,6 +89,9 @@ const Home = () => {
       </NaverBtn>
       <FacebookBtn onPress={loginWithFacebook}>
         <NaverBtnText>페이스북 로그인</NaverBtnText>
+      </FacebookBtn>
+      <FacebookBtn onPress={getProfileFacebook}>
+        <NaverBtnText>페이스북 프로필</NaverBtnText>
       </FacebookBtn>
       <DataContent>
         <Text>data : {result ? result : ""}</Text>

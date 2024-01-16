@@ -32,6 +32,21 @@
         "projectId": "697b1386-ed28-4ce0-a827-ad5f48c882f1"
       }
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "306509029056419",
+          "clientToken": "a15d81cd6b2dee4ead2f2fcbe2a47138",
+          "displayName": "snstest",
+          "scheme": "fb306509029056419",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ]
   }
 }
