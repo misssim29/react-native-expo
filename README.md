@@ -204,6 +204,8 @@ sdk 버전문제시 : build.gradle에서 maven { url 'https://devrepo.kakao.com/
 
 [참조](https://ssilook.tistory.com/entry/RN-React-Native-%ED%82%A4-%ED%95%B4%EC%8B%9CKey-Hash-%EC%96%BB%EB%8A%94-%EB%B0%A9%EB%B2%95)
 
+keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+
 경로로 들어가서 keytool -exportcert -alias my-key-alias -keystore my-upload-key.keystore | openssl sha1 -binary | openssl base64
 
 keytool -exportcert -alias androiddebugkey -keystore sns-test/android/app/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
@@ -496,3 +498,13 @@ android 폴더 들어가서 ./gradlew clean
 [참조](https://github.com/crossplatformkorea/react-native-naver-login)
 
 npm install @react-native-seoul/naver-login --save
+
+## facebook 페이스북 로그인
+
+[참조](https://docs.expo.dev/guides/facebook-authentication/)
+
+npm install --save react-native-fbsdk-next
+
+## 푸시알림 push notification
+
+[참조](https://documentation.onesignal.com/docs/react-native-expo-sdk-setup)

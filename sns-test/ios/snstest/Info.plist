@@ -24,24 +24,17 @@
     <string>????</string>
     <key>CFBundleURLTypes</key>
     <array>
-    <dict>
-      <key>CFBundleTypeRole</key>
-      <string>Editor</string>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>kakao52663742113e915b5147636c03b9d784</string>
-      </array>
-      <key>CFBundleURLName</key>
-      <string>naver</string>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>com.misssim2929.snstest</string>
-      </array>
-    </dict>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>kakao52663742113e915b5147636c03b9d784</string>
+        </array>
+      </dict>
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>snstest</string>
           <string>com.misssim2929.snstest</string>
         </array>
       </dict>
