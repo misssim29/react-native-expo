@@ -165,51 +165,6 @@ npm i babel-plugin-module-resolver
 
 ```
 
-## 카카오 로그인
-
-\*\* 키해시때문에 그냥 prebuild 이용하는게 속편함..
-
-https://github.com/crossplatformkorea/react-native-kakao-login?tab=readme-ov-file
-
-1.  위 내용의 expo버전대로 설정
-
-https://docs.expo.dev/build/setup/
-
-위 내용대로 EAS빌드하기
-
-```
-// eas.json
-"preview": {
-  "distribution": "internal",
-  "ios": {
-    "simulator": true
-  },
-  "android": {
-    "buildType": "apk"
-  }
-},
-```
-
-eas build -p android --profile preview
-
-keytool -exportcert -alias androiddebugkey -keystore /Users/simjuyeon/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
-
-2.  prebuild 사용
-
-npm i @react-native-seoul/kakao-login 하고 npx pod-install
-
-sdk 버전문제시 : build.gradle에서 maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'} 추가
-
-키해시 추출 : keytool -exportcert -alias <RELEASE_KEY_ALIAS> -keystore <RELEASE_KEY_PATH> | openssl sha1 -binary | openssl base64
-
-[참조](https://ssilook.tistory.com/entry/RN-React-Native-%ED%82%A4-%ED%95%B4%EC%8B%9CKey-Hash-%EC%96%BB%EB%8A%94-%EB%B0%A9%EB%B2%95)
-
-keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
-
-경로로 들어가서 keytool -exportcert -alias my-key-alias -keystore my-upload-key.keystore | openssl sha1 -binary | openssl base64
-
-keytool -exportcert -alias androiddebugkey -keystore sns-test/android/app/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
-
 ## base64 사용법(한글)
 
 npm i @craftzdog/react-native-buffer react-native-quick-base64
@@ -489,9 +444,33 @@ android 폴더 들어가서 ./gradlew clean
 
 그런다음 npx expo run:android
 
+### prebuild시 주의점
+
+1. app.json에서 plugin을 추가해주면 prebuild를 다시해줘야 적용된다..... (android, ios 설정 다시해야함 ^^...)
+2. 먼저 윗 내용대로 local.properties부터 설정해줘야함
+3. 그리고 android, ios 설정 다시해주자
+
 ## android studio에서 google 로그인 안되는 문제
 
 애초에 google store가 가능한 디바이스로 다운받고 실행해야함
+
+## 카카오 로그인
+
+https://github.com/crossplatformkorea/react-native-kakao-login?tab=readme-ov-file
+
+npm i @react-native-seoul/kakao-login 하고 npx pod-install
+
+sdk 버전문제시 : build.gradle에서 maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'} 추가
+
+키해시 추출 : keytool -exportcert -alias <RELEASE_KEY_ALIAS> -keystore <RELEASE_KEY_PATH> | openssl sha1 -binary | openssl base64
+
+[참조](https://ssilook.tistory.com/entry/RN-React-Native-%ED%82%A4-%ED%95%B4%EC%8B%9CKey-Hash-%EC%96%BB%EB%8A%94-%EB%B0%A9%EB%B2%95)
+
+keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+
+경로로 들어가서 keytool -exportcert -alias my-key-alias -keystore my-upload-key.keystore | openssl sha1 -binary | openssl base64
+
+keytool -exportcert -alias androiddebugkey -keystore sns-test/android/app/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
 
 ## naver 네이버 로그인
 
@@ -504,6 +483,32 @@ npm install @react-native-seoul/naver-login --save
 [참조](https://docs.expo.dev/guides/facebook-authentication/)
 
 npm install --save react-native-fbsdk-next
+
+```
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "48127127xxxxxxxx",
+          "clientToken": "c5078631e4065b60d7544a95xxxxxxxx",
+          "displayName": "RN SDK Demo",
+          "scheme": "fb48127127xxxxxxxx",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ]
+  }
+}
+```
+
+이거 추가하고 prebuild 해주면 됨 그래서 sns 구현의 경우 facebook 먼저해서 prebuild해주고 카카오,네이버 설정해주는게 좋음
+
+- android에서 url 어쩌고하면서 안될경우 : facebook 개발자 내 앱 들어가서 기본설정 - 플랫폼추가 android해서 키해시 넣어줘야함
 
 ## 푸시알림 push notification
 

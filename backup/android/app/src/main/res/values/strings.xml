@@ -1,0 +1,9 @@
+<resources>
+  <string name="app_name">sns-test</string>
+  <string name="kakao_app_key">52663742113e915b5147636c03b9d784</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="facebook_app_id">306509029056419</string>
+  <string name="facebook_client_token">a15d81cd6b2dee4ead2f2fcbe2a47138</string>
+  <string name="fb_login_protocol_scheme">fb306509029056419</string>
+</resources>
