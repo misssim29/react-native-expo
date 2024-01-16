@@ -462,15 +462,17 @@ npm i @react-native-seoul/kakao-login 하고 npx pod-install
 
 sdk 버전문제시 : build.gradle에서 maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'} 추가
 
+### 릴리즈된 키해시 추출 방법
+
 키해시 추출 : keytool -exportcert -alias <RELEASE_KEY_ALIAS> -keystore <RELEASE_KEY_PATH> | openssl sha1 -binary | openssl base64
 
 [참조](https://ssilook.tistory.com/entry/RN-React-Native-%ED%82%A4-%ED%95%B4%EC%8B%9CKey-Hash-%EC%96%BB%EB%8A%94-%EB%B0%A9%EB%B2%95)
 
-keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+### preview 키해시 추출 방법
 
-경로로 들어가서 keytool -exportcert -alias my-key-alias -keystore my-upload-key.keystore | openssl sha1 -binary | openssl base64
+expo 사이트에서 project settings -> Credentials 들어가서 sha-1 Fingerprint 확인
 
-keytool -exportcert -alias androiddebugkey -keystore sns-test/android/app/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
+[링크](https://tomeko.net/online_tools/hex_to_base64.php) 여기 들어가서 변환
 
 ## naver 네이버 로그인
 
