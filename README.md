@@ -183,7 +183,7 @@ npm i --save-dev babel-plugin-styled-components @types/styled-components @types/
 
 babel.config.js 에 plugins에 babel-plugin-styled-components 추가
 
-https://hyeon.pro/dev/react-native%EC%97%90%EC%84%9C-styled-components-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/
+[참조](https://hyeon.pro/dev/react-native%EC%97%90%EC%84%9C-styled-components-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/)
 
 ```
 import styled form 'styled-components/native';
@@ -424,32 +424,6 @@ npx expo install react-native-webview
 - app.json에서 이름 바꾸기
 - npx expo prebuild --clean
 
-## prebuild
-
-[참조](https://docs.expo.dev/workflow/prebuild/)
-
-npx expo prebuild
-
-npx expo run:android
-
-npx expo run:ios
-
-### prebuild하면 생기는 sdk 관련문제
-
-prebuild시에 생기는 android폴더 내에 local.properties파일을 생성
-
-sdk.dir = /Users/내정보명(ex : simjuyeon)/library/Android/sdk
-
-android 폴더 들어가서 ./gradlew clean
-
-그런다음 npx expo run:android
-
-### prebuild시 주의점
-
-1. app.json에서 plugin을 추가해주면 prebuild를 다시해줘야 적용된다..... (android, ios 설정 다시해야함 ^^...)
-2. 먼저 윗 내용대로 local.properties부터 설정해줘야함
-3. 그리고 android, ios 설정 다시해주자
-
 ## android studio에서 google 로그인 안되는 문제
 
 애초에 google store가 가능한 디바이스로 다운받고 실행해야함
@@ -460,7 +434,56 @@ https://github.com/crossplatformkorea/react-native-kakao-login?tab=readme-ov-fil
 
 npm i @react-native-seoul/kakao-login 하고 npx pod-install
 
-sdk 버전문제시 : build.gradle에서 maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'} 추가
+```
+// ios/앱이름/info.plist
+ <key>CFBundleURLTypes</key>
+ <array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>kakao{카카오 네이티브앱 아이디를 적어주세요}</string>
+    </array>
+  </dict>
+ </array>
+ <key>CFBundleVersion</key>
+ <string>1</string>
+ <key>KAKAO_APP_KEY</key>
+ <string>{카카오 네이티브앱 아이디를 적어주세요}</string>
+ <key>KAKAO_APP_SCHEME</key> // 선택 사항 멀티 플랫폼 앱 구현 시에만 추가하면 됩니다
+ <string>{카카오 앱 스킴을 적어주세요}</string> // 선택 사항
+ <key>LSApplicationQueriesSchemes</key>
+ <array>
+   <string>kakaokompassauth</string>
+   <string>storykompassauth</string>
+   <string>kakaolink</string>
+ </array>
+
+// android/build.gradle
+맨아래
+maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'}
+// android/app/src/main/AndroidManifest.xml
+<activity
+   android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+   android:exported="true">
+  <intent-filter>
+      <action android:name="android.intent.action.VIEW" />
+      <category android:name="android.intent.category.DEFAULT" />
+      <category android:name="android.intent.category.BROWSABLE" />
+
+      <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
+      <data android:host="oauth"
+          android:scheme="kakao{카카오 네이티브 앱 key를 입력해주세요}" />
+  </intent-filter>
+</activity>
+
+// android/app/src/main/res/values/strings.xml
+<resources>
+    <string name="app_name">KakaoLoginExample</string>
++   <string name="kakao_app_key">your_app_key</string>
+</resources>
+```
 
 ### 릴리즈된 키해시 추출 방법
 
@@ -480,6 +503,16 @@ expo 사이트에서 project settings -> Credentials 들어가서 sha-1 Fingerpr
 
 npm install @react-native-seoul/naver-login --save
 
+```
+//Info.plist
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>naversearchapp</string>
+  <string>naversearchthirdlogin</string>
+</array>
+
+```
+
 ## facebook 페이스북 로그인
 
 [참조](https://docs.expo.dev/guides/facebook-authentication/)
@@ -487,6 +520,7 @@ npm install @react-native-seoul/naver-login --save
 npm install --save react-native-fbsdk-next
 
 ```
+app.json
 {
   "expo": {
     "plugins": [
@@ -512,6 +546,58 @@ npm install --save react-native-fbsdk-next
 
 - android에서 url 어쩌고하면서 안될경우 : facebook 개발자 내 앱 들어가서 기본설정 - 플랫폼추가 android해서 키해시 넣어줘야함
 
+## Apple 애플 로그인
+
+npx expo install expo-apple-authentication
+
+[참조](https://docs.expo.dev/versions/latest/sdk/apple-authentication/#login)
+
+```
+//app.json
+{
+  "ios": {
+    "usesAppleSignIn": true
+  }
+
+  "plugins": ["expo-apple-authentication"]
+}
+
+prebuild나 eas build했을 경우 : xcode 가서 생성된 ios폴더 열어서 signing & Capabilities에서 team 설정 유료결제된 계정으로 바꿔야됨..(현재 퓨쳐다임 꼽사리껴잇음)
+
+```
+
 ## 푸시알림 push notification
 
 [참조](https://documentation.onesignal.com/docs/react-native-expo-sdk-setup)
+
+# 써드파티라이브러리 써서 prebuild 해야하는것들 정리 (prebuild떄문에 맨 마지막에 구현해야 덜 귀찮음)
+
+카카오로그인, 네이버로그인
+
+## prebuild
+
+[참조](https://docs.expo.dev/workflow/prebuild/)
+
+npx expo prebuild
+
+npx expo run:android
+
+npx expo run:ios
+
+### prebuild하면 생기는 sdk 관련문제
+
+prebuild시에 생기는 android폴더 내에 local.properties파일을 생성
+
+sdk.dir = /Users/내정보명(ex : simjuyeon)/library/Android/sdk
+
+android 폴더 들어가서 ./gradlew clean
+
+ios 들어가서 npx pod-install
+
+그런다음 npx expo run:android
+
+### prebuild시 주의점
+
+1. app.json에서 plugin을 추가해주면 prebuild를 다시해줘야 적용된다..... (android, ios 설정 다시해야함 ^^...)
+2. 먼저 윗 내용대로 local.properties부터 설정해줘야함
+3. 그리고 android, ios 설정 다시해주자

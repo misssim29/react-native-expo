@@ -1,0 +1,51 @@
+{
+  "ios": {
+    "usesAppleSignIn": true
+  },
+  "expo": {
+    "scheme": "snstest2",
+    "name": "sns-test2",
+    "slug": "sns-test2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.misssim2929.snstest2"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.misssim2929.snstest2"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-apple-authentication",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "306509029056419",
+          "clientToken": "a15d81cd6b2dee4ead2f2fcbe2a47138",
+          "displayName": "snstest",
+          "scheme": "fb306509029056419",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ]
+  }
+}
