@@ -616,7 +616,7 @@ onesiganl에서 등록시 p12로 등록하기 선택해야함
 
 [참조](https://documentation.onesignal.com/docs/android-sdk-setup)
 
-firebase에서 프로젝트 추가하고 json받아서 등록해줘야한다
+firebase에서 프로젝트 추가하고 json받아서 등록해줘야한다 [firebase sdk.json 받는방법](https://documentation.onesignal.com/docs/generate-firebase-credentials)
 
 [참조](https://documentation.onesignal.com/docs/mobile-sdk#get-user-consent-for-data-collection)
 
@@ -634,3 +634,13 @@ firebase에서 프로젝트 추가하고 json받아서 등록해줘야한다
     router.replace(`/article/${event.notification.rawPayload?.custom.a.id}`);
   });
 ```
+
+## Expo Go버전인지, build 버전인지 구분하는법
+
+```
+import Constants, { ExecutionEnvironment } from "expo-constants";
+const isExpoGo =
+  Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+```
+
+prebuild에서만 작동하는 기능을 넣었을떄 expo를 작동하면 오류가 나는데 이렇게 구분해주면 expo 테스트시에 오류가 나지않는다. [참조](https://docs.expo.dev/bare/using-expo-client/)

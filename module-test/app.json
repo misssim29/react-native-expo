@@ -15,9 +15,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.misssim2929.moduletest"
@@ -38,6 +36,12 @@
         "onesignal-expo-plugin",
         {
           "mode": "development"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Socdoc to access your camera."
         }
       ]
     ],
