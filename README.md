@@ -580,15 +580,13 @@ npx expo run:android
 
 npx expo run:ios
 
-### prebuild하면 생기는 sdk 관련문제
+### android prebuild하면 생기는 sdk 관련문제
 
 prebuild시에 생기는 android폴더 내에 local.properties파일을 생성
 
 sdk.dir = /Users/내정보명(ex : simjuyeon)/library/Android/sdk
 
 android 폴더 들어가서 ./gradlew clean
-
-ios 들어가서 npx pod-install
 
 그런다음 npx expo run:android
 
@@ -619,3 +617,20 @@ onesiganl에서 등록시 p12로 등록하기 선택해야함
 [참조](https://documentation.onesignal.com/docs/android-sdk-setup)
 
 firebase에서 프로젝트 추가하고 json받아서 등록해줘야한다
+
+[참조](https://documentation.onesignal.com/docs/mobile-sdk#get-user-consent-for-data-collection)
+
+```
+  OneSignal.initialize("App key");
+  OneSignal.Notifications.requestPermission(true);
+
+  //밖에서 클릭
+  OneSignal.Notifications.addEventListener("click", (event) => {
+    router.replace(`/article/${event.notification.rawPayload?.custom.a.id}`);
+  });
+
+  //인앱일때
+  OneSignal.Notifications.addEventListener("foregroundWillDisplay", (event) => {
+    router.replace(`/article/${event.notification.rawPayload?.custom.a.id}`);
+  });
+```
