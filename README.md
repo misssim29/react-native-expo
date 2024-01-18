@@ -610,8 +610,6 @@ ios 들어가서 npx pod-install
 
 [참조](https://fomaios.tistory.com/entry/iOS-OneSignal%EC%9C%BC%EB%A1%9C-%ED%91%B8%EC%89%AC%EC%95%8C%EB%A6%BC-%EB%B3%B4%EB%82%B4%EB%B3%B4%EA%B8%B0OneSignal-Push-Notification)
 
-APP ID : c87ff605-e618-421e-bc28-bbff082c3b78
-
 [애플개발자 certificate](https://developer.apple.com/account/resources/certificates/list) 가서 키체인 발급받고 위 참조 내용대로 진행
 
 onesiganl에서 등록시 p12로 등록하기 선택해야함
