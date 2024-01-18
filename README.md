@@ -566,10 +566,6 @@ npx expo install expo-apple-authentication
 
 prebuild나 eas build했을 경우 : xcode 가서 생성된 ios폴더 열어서 signing & Capabilities에서 team 설정 유료결제된 계정으로 바꿔야됨..(현재 퓨쳐다임 꼽사리껴잇음)
 
-## 푸시알림 push notification
-
-[참조](https://documentation.onesignal.com/docs/react-native-expo-sdk-setup)
-
 # 써드파티라이브러리 써서 prebuild 해야하는것들 정리 (prebuild떄문에 맨 마지막에 구현해야 덜 귀찮음)
 
 카카오로그인, 네이버로그인
@@ -605,3 +601,15 @@ ios 들어가서 npx pod-install
 #### Managed Workflow와 Bare Workflow의 차이
 
 > Managed Workflow는 prebuild를 하기 전 상태, 즉 android와 ios를 컨트롤할수 없는 상태로 개발자가 네이티브 코드를 건드릴 필요가 없다. Managed 상태에서 expo 기능들을 추가한 후 prebuild를 하면 그에 맞춰 Bare Workflow로 변경돼 ios와 android파일들이 생긴다. 처음부터 Bare Workflow로 개발할 수도 있지만 그러면 기본적으로 자동제공되는 expo의 라이브러리들을 간편하게 적용하기 어렵고 적용할때마다 서드파티라이브러리들처럼 ios와 android파일들을 설정해줘야한다. (심지어 제공이 안되는 경우도 있다)그래서 expo 기본제공 라이브러리들을 설치한 후, prebuild해 써드파티라이브러리들을 적용하는것이 베스트(plugin추가시 코드병합이 안된다.. 걍 지우고 다시 prebuild해야함). 아직 네이티브 코드를 건드려야하는 써드파티라이브러리들은 카카오,네이버 로그인뿐이라 플러그인 추가해서 재 prebuild를 할 시엔 얘네만 다시 적용해서 테스트 꼭 해주자..
+
+## 푸시알림 push notification
+
+[참조](https://documentation.onesignal.com/docs/react-native-expo-sdk-setup)
+
+> ios
+> [참조](https://fomaios.tistory.com/entry/iOS-OneSignal%EC%9C%BC%EB%A1%9C-%ED%91%B8%EC%89%AC%EC%95%8C%EB%A6%BC-%EB%B3%B4%EB%82%B4%EB%B3%B4%EA%B8%B0OneSignal-Push-Notification)
+
+APP ID : c87ff605-e618-421e-bc28-bbff082c3b78
+
+> Android
+> [참조](https://documentation.onesignal.com/docs/android-sdk-setup)
