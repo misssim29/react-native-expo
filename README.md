@@ -210,6 +210,10 @@ vscode plugin : vscode-styled-components
 
 ## 이미지 가져오는법 Image
 
+npx expo install expo-image
+
+import { Image } from 'expo-image';
+
 ### 로컬
 
 ```
@@ -319,6 +323,8 @@ npx expo install expo-splash-screen
 
 ## 카메라 기능
 
+### Expo 버전
+
 npx expo install expo-camera
 
 [참고자료](https://docs.expo.dev/versions/latest/sdk/camera/)
@@ -326,6 +332,58 @@ npx expo install expo-camera
 npx expo install expo-image-picker
 
 [참고자료](https://docs.expo.dev/tutorial/image-picker/)
+
+### 써드파티라이브러리 버전 (permission부분이 겹쳐서 expo버전 카메라 기능 다 설치해주고 하면 편하다)
+
+npm i react-native-image-crop-picker
+
+[참고자료](https://github.com/ivpusic/react-native-image-crop-picker)
+
+멀티셀렉트 + 크롭기능
+
+```
+  const [ImageSelect, setImageSelect] = useState([]);
+  const pickImageAsync = async () => {
+    await ImagePicker.openPicker({
+      multiple: true,
+      loadingLabelText: "사진 선택중...",
+      compressImageQuality: 1,
+    }).then(async (images) => {
+      const result = [];
+      for await (const image of images) {
+        const img = await ImagePicker.openCropper({
+          mediaType: "photo",
+          path: image.path,
+          freeStyleCropEnabled: true,
+          includeBase64: true,
+        });
+        console.log(img);
+        result.push(img);
+      }
+      setImageSelect(result);
+    });
+  };
+  const pickCameraAsync = async () => {
+    ImagePicker.openCamera({
+      cropping: true,
+      useFrontCamera: false,
+      showCropFrame: true,
+      compressImageQuality: 1,
+      freeStyleCropEnabled: true,
+      includeBase64: true,
+    }).then((image) => {
+      setImageSelect([image]);
+    });
+  };
+```
+
+> 전면카메라 쓸거면 androidManifast 가서 아래 코드 추가
+
+```
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+  <uses-feature android:name="android.hardware.camera" android:required="false" />
+  <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+```
 
 ## 편집기
 
@@ -568,7 +626,7 @@ prebuild나 eas build했을 경우 : xcode 가서 생성된 ios폴더 열어서 
 
 # 써드파티라이브러리 써서 prebuild 해야하는것들 정리 (prebuild떄문에 맨 마지막에 구현해야 덜 귀찮음)
 
-카카오로그인, 네이버로그인
+카카오로그인, 네이버로그인, 카메라크롭, 푸시알림
 
 ## prebuild
 
@@ -626,12 +684,12 @@ firebase에서 프로젝트 추가하고 json받아서 등록해줘야한다 [fi
 
   //밖에서 클릭
   OneSignal.Notifications.addEventListener("click", (event) => {
-    router.replace(`/article/${event.notification.rawPayload?.custom.a.id}`);
+    router.replace(`/article/${event.notification.additionalData?.id}`);
   });
 
   //인앱일때
   OneSignal.Notifications.addEventListener("foregroundWillDisplay", (event) => {
-    router.replace(`/article/${event.notification.rawPayload?.custom.a.id}`);
+    router.replace(`/article/${event.notification.additionalData?.id}`);
   });
 ```
 
@@ -641,6 +699,26 @@ firebase에서 프로젝트 추가하고 json받아서 등록해줘야한다 [fi
 import Constants, { ExecutionEnvironment } from "expo-constants";
 const isExpoGo =
   Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+
+//import 분리하는법
+let OneSignal: any;
+if (!isExpoGo) {
+  OneSignal = require("react-native-onesignal").OneSignal;
+} else {
+  OneSignal = View;
+}
 ```
 
 prebuild에서만 작동하는 기능을 넣었을떄 expo를 작동하면 오류가 나는데 이렇게 구분해주면 expo 테스트시에 오류가 나지않는다. [참조](https://docs.expo.dev/bare/using-expo-client/)
+
+## 환경변수 설정하기
+
+[참조](https://docs.expo.dev/guides/environment-variables/)
+
+build할땐 eas.json에 아래 추가
+
+```
+"env": {
+  "EXPO_PUBLIC_API_URL": "https://api.socdoc.io/community_v5/prod"
+}
+```

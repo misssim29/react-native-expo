@@ -1,11 +1,15 @@
 import { View, Text } from "react-native";
+import styled from "styled-components";
 
 const Home = () => {
   return (
-    <View>
+    <Flex>
       <Text>Home</Text>
-    </View>
+    </Flex>
   );
 };
+const Flex = styled(View)`
+  flex: 1;
+`;
 
 export default Home;
