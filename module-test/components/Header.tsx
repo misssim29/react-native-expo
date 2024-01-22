@@ -20,6 +20,9 @@ const Header = () => {
       <Link href="/CameraExpo" style={{ paddingTop: 10, paddingBottom: 10 }}>
         CameraExpo
       </Link>
+      <Link href="/Write" style={{ paddingTop: 10, paddingBottom: 10 }}>
+        Write
+      </Link>
     </View>
   );
 };

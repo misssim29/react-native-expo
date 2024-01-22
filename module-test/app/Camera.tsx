@@ -12,20 +12,26 @@ const CameraPrebuild = () => {
       multiple: true,
       loadingLabelText: "사진 선택중...",
       compressImageQuality: 1,
-    }).then(async (images) => {
-      const result = [];
-      for await (const image of images) {
-        const img = await ImagePicker.openCropper({
-          mediaType: "photo",
-          path: image.path,
-          freeStyleCropEnabled: true,
-          includeBase64: true,
-        });
-        console.log(img);
-        result.push(img);
-      }
-      setImageSelect(result);
-    });
+    })
+      .then(async (images) => {
+        console.log(images);
+        const result = [];
+        for await (const image of images) {
+          const img = await ImagePicker.openCropper({
+            mediaType: "photo",
+            path: image.path,
+            freeStyleCropEnabled: true,
+            includeBase64: true,
+          });
+          console.log(img);
+          result.push(img);
+        }
+        setImageSelect(result);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("이미지를 선택해주세요.");
+      });
   };
   const pickCameraAsync = async () => {
     ImagePicker.openCamera({
@@ -35,9 +41,13 @@ const CameraPrebuild = () => {
       compressImageQuality: 1,
       freeStyleCropEnabled: true,
       includeBase64: true,
-    }).then((image) => {
-      setImageSelect([image]);
-    });
+    })
+      .then((image) => {
+        setImageSelect([image]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <Flex>

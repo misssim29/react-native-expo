@@ -52,9 +52,9 @@
     <key>NSCameraUsageDescription</key>
     <string>Allow Socdoc to access your camera.</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <string>$(PRODUCT_NAME)에서 녹음접근 권한을 수락합니다.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your photos</string>
+    <string>$(PRODUCT_NAME)에서 사진접근 권한을 수락합니다.</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
