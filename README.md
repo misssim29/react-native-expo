@@ -163,6 +163,8 @@ npm i babel-plugin-module-resolver
     }
   },
 
+* 이렇게 바꾸고도 ts에러뜨면 vscode 껐다키기..
+
 ```
 
 ## base64 사용법(한글)
@@ -722,3 +724,12 @@ build할땐 eas.json에 아래 추가
   "EXPO_PUBLIC_API_URL": "https://api.socdoc.io/community_v5/prod"
 }
 ```
+
+# 처음 환경 셋팅 정리
+
+1. 패키지 생성
+2. route 설정
+3. styled-component 설치
+4. redux 설치
+5. 절대경로 설정
+6. 환경변수 설정하기
