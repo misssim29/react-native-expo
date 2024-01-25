@@ -2,7 +2,7 @@
 
 ## 패키지 생성
 
-npx create-expo-app '프로젝트네임'
+npx create-expo-app --template blank@49 '프로젝트네임'
 
 ## 실행
 
@@ -473,6 +473,23 @@ npx expo install expo-secure-store
     }
   }
 
+//컴포넌트
+import * as SecureStore from "expo-secure-store";
+
+const [Token, setToken] = useState(null);
+useEffect(() => {
+  getUserData();
+}, []);
+async function getUserData() {
+  let token = await SecureStore.getItemAsync("token");
+  if (token) {
+    setToken(token);
+  }
+}
+const insertToken = () => {
+  SecureStore.setItemAsync("token", "토큰값 입력");
+  console.log("입력");
+};
 ```
 
 ## webview 웹뷰
@@ -725,6 +742,18 @@ build할땐 eas.json에 아래 추가
 }
 ```
 
+## 로딩바
+
+React natvie에서 ActivityIndicator 태그로 지원한다
+
+```
+import { ActivityIndicator } from "react-native";
+<ActivityIndicator
+  color="rgb(253, 57, 149)"
+  style={{ flex: 1 }}
+></ActivityIndicator>
+```
+
 # 처음 환경 셋팅 정리
 
 1. 패키지 생성
@@ -734,3 +763,7 @@ build할땐 eas.json에 아래 추가
 5. 절대경로 설정
 6. 환경변수 설정하기
 7. 로컬스토리지 설정하기
+8. 아이콘이랑 스플래스 적용
+9. 로딩바 제작
+10. status-bar (테마별 변경)
+11. 모달창 적용

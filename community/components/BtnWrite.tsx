@@ -16,7 +16,7 @@ const WriteButton = styled(Pressable)`
   bottom: 30px;
   right: 30px;
   z-index: 2;
-  border-radius: 50%;
+  border-radius: 80px;
   width: 80px;
   height: 80px;
   justify-content: center;

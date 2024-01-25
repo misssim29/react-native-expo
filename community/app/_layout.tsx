@@ -1,5 +1,3 @@
-import { View, Text } from "react-native";
-import { Slot } from "expo-router";
 import { ThemeProvider } from "styled-components";
 import theme from "@/styles/theme";
 import store from "@/store/index";

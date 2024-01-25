@@ -1,6 +1,6 @@
 export default {
   color: {
-    main: "#fd3995",
+    main: "#db6764",
     text: "#505050",
   },
   fonts: {
