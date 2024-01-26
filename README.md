@@ -267,7 +267,7 @@ npx expo install expo-updates
 https://velog.io/@strawsunny/expo%EC%97%90%EC%84%9C-update-%EA%B8%B0%EB%8A%A5-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
 
 ```
-// app.json이나 app/_layout.tsx
+// app.js나 app/_layout.tsx
 import * as Updates from "expo-updates";
 async function onFetchUpdateAsync() {
   try {

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Home = () => {
   return (
     <View>
-      <Text>Change</Text>
+      <Text>Home</Text>
     </View>
   );
 };

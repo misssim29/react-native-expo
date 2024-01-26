@@ -30,28 +30,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-updates",
-        {
-          "username": "misssim29"
-        }
-      ]
-    ],
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/95aeb9db-bca5-4969-8678-f96b020324e1"
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "95aeb9db-bca5-4969-8678-f96b020324e1"
-      }
-    }
+    "plugins": ["expo-router"]
   }
 }
