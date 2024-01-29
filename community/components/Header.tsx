@@ -10,7 +10,7 @@ function Header() {
   const loggedIn = useSelector((state: RootState) => state.status.loggedIn);
   const dispatch = useDispatch();
   const showMenu = () => {
-    dispatch(statusSlice.actions.setModal(true));
+    dispatch(statusSlice.actions.setShowMenu(true));
   };
 
   return (

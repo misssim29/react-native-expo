@@ -445,6 +445,8 @@ import Icon from "@/components/Icon";
 
 npx expo install react-native-reanimated
 
+[참조](https://docs.expo.dev/versions/latest/sdk/reanimated/)
+
 ```
 //babel.config.js
 module.exports = function (api) {

@@ -1,4 +1,4 @@
-import { View, Platform, SafeAreaView, Pressable, Text } from "react-native";
+import { View, Platform, Pressable, Text } from "react-native";
 import { Slot, SplashScreen } from "expo-router";
 import Header from "@/components/Header";
 import * as SecureStore from "expo-secure-store";
@@ -9,11 +9,14 @@ import Modal from "@/components/Modal";
 import { StatusBar } from "expo-status-bar";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducer";
+import Menu from "@/components/Menu";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const LayoutInner = () => {
   const [Token, setToken] = useState(null);
   const [fontsLoaded, setfontsLoaded] = useState(false);
   const onModal = useSelector((state: RootState) => state.status.modal);
+  const onMenu = useSelector((state: RootState) => state.status.showMenu);
   // 유저데이터 가져오기
   async function getUserData() {
     let token = await SecureStore.getItemAsync("token");
@@ -61,12 +64,14 @@ const LayoutInner = () => {
         style={{
           flex: 1,
           paddingTop: Platform.OS === "ios" ? 0 : 40,
+          position: "relative",
         }}
       >
         <Header />
         <Slot />
         <BtnWrite />
       </SafeAreaView>
+      {onMenu ? <Menu /> : ""}
       {onModal ? <Modal /> : ""}
     </>
   );

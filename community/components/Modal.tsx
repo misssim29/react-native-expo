@@ -1,9 +1,12 @@
 import { Pressable, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import statusSlice from "@/slices/status";
+import Menu from "./Menu";
+import { RootState } from "@/store/reducer";
 
 const Modal = () => {
   const dispatch = useDispatch();
+  const type = useSelector((state: RootState) => state.status.modalType);
   return (
     <>
       <Pressable
