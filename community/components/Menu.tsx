@@ -1,6 +1,6 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import statusSlice from "@/slices/status";
 import Animated, {
@@ -10,10 +10,12 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { useEffect, useState, useCallback } from "react";
+import { AntDesign } from "@expo/vector-icons";
+import { RootState } from "@/store/reducer";
 
 const Menu = () => {
   const dispatch = useDispatch();
-
+  const loggedIn = useSelector((state: RootState) => state.status.loggedIn);
   const [onMenu, setOnMenu] = useState(false);
 
   const closeMenu = useCallback(() => {
@@ -58,28 +60,46 @@ const Menu = () => {
         animatedStyle,
       ]}
     >
-      <MenuWrap>
-        <SafeAreaView>
-          <View>
-            <Pressable onPress={closeMenu}>
-              <Text>닫기</Text>
-            </Pressable>
-          </View>
-          <Text style={{ color: "#222" }}>Menu</Text>
-        </SafeAreaView>
-      </MenuWrap>
+      <SafeAreaView>
+        <MenuHeader>
+          <Pressable onPress={closeMenu}>
+            <AntDesign name="close" size={30} color="#fff" />
+          </Pressable>
+        </MenuHeader>
+        <View>
+          {loggedIn ? (
+            <BtnLogin>
+              <BtnLoginText>마이페이지</BtnLoginText>
+            </BtnLogin>
+          ) : (
+            <BtnLogin>
+              <BtnLoginText>로그인</BtnLoginText>
+            </BtnLogin>
+          )}
+        </View>
+      </SafeAreaView>
     </Animated.View>
   );
 };
 
-const MenuWrap = styled(View)`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  bottom: 0;
-  left: 0;
-  background-color: ${(props: any) => props.theme.color.main};
-  z-index: 101;
+const BtnLogin = styled(TouchableOpacity)`
+  background-color: #fff;
+  margin: 0 5%;
+  padding: 20px 0;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+`;
+const BtnLoginText = styled(Text)`
+  font-size: 24px;
+  color: ${(props) => props.theme.color.main};
+  font-weight: bold;
+`;
+
+const MenuHeader = styled(View)`
+  padding: 15px 5%;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 export default Menu;

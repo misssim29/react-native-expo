@@ -405,6 +405,8 @@ react-native의 기본버전보다 expo버전으로 쓰는게 더 좋다
 
 ## IconFont 적용
 
+[expo지원 아이콘 쓰기 문서](https://docs.expo.dev/guides/icons/) , [라이브러리 링크](https://icons.expo.fyi/Index)
+
 npm install --save react-native-vector-icons --save-dev @types/react-native-vector-icons
 
 ```

@@ -8,9 +8,17 @@ import styled from "styled-components";
 function list() {
   const [dataList, setDataList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const renderItem = useCallback(({ item }: { item: any }) => {
-    return <ListItem item={item}></ListItem>;
-  }, []);
+
+  const renderItem = useCallback(
+    ({ item, index }: { item: any; index: number }) => {
+      return (
+        <>
+          <ListItem item={item} idx={index}></ListItem>
+        </>
+      );
+    },
+    []
+  );
 
   const APIURL = process.env.EXPO_PUBLIC_API_URL;
   useEffect(() => {
