@@ -27,10 +27,8 @@ function Header() {
           </Pressable>
         </LinkBox>
       </Navgation>
-      <MenuBtn href="/" asChild>
-        <Pressable onPress={showMenu}>
-          <Icon name="menu" size={20} color="#fff" />
-        </Pressable>
+      <MenuBtn onPress={showMenu}>
+        <Icon name="menu" size={20} color="#fff" />
       </MenuBtn>
     </Container>
   );
@@ -38,7 +36,8 @@ function Header() {
 const Navgation = styled(View)`
   flex-direction: row;
 `;
-const MenuBtn = styled(Link)`
+
+const MenuBtn = styled(Pressable)`
   padding: 20px 0;
 `;
 

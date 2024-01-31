@@ -758,6 +758,14 @@ import { ActivityIndicator } from "react-native";
 ></ActivityIndicator>
 ```
 
+## 폰트 적용
+
+[참조](https://velog.io/@tata-v_vlelog/RN-expo-%ED%8F%B0%ED%8A%B8-%EB%B3%80%EA%B2%BD%ED%95%98%EA%B8%B0-ft.-react-native-global-props)
+
+npm i react-native-global-props --save
+
+npm install --save-dev @types/react-native-global-props
+
 # 처음 환경 셋팅 정리
 
 1. 패키지 생성
